@@ -54,9 +54,21 @@ while True:
             # Update the conversation history for the bot
             # It is important that this happens last, after the learning step
             bot.storage.add_to_conversation(CONVERSATION_ID, statement, response)
+            bot.output.process_response(response)
+        else:
+            question = input_statement
+            
+            print('Say me the correct response, please.')
+            response =bot.input.process_input_statement()
 
-        bot.output.process_response(response)
+            bot.learn_response(response, question)
+            bot.storage.add_to_conversation(CONVERSATION_ID, question, response)
+            #bot.output.process_response(input_statement)
 
+            print("I'm understand, for {} this the coherent response to {}. \n ". format(question,response) )
+            print("We can continue, say me anything. \n")            
+            
+            
     # Press ctrl-c or ctrl-d on the keyboard to exit
     except (KeyboardInterrupt, EOFError, SystemExit):
         break
